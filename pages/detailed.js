@@ -2,6 +2,7 @@
 import React from 'react'
 import Head from 'next/head'
 import {Row, Col, Breadcrumb,Icon,Affix} from 'antd'
+import axios from 'axios'
 import ReactMarkdown from 'react-markdown'
 import MarkNav from 'markdown-navbar';
 import 'markdown-navbar/dist/navbar.css';
@@ -13,7 +14,7 @@ import Footer from '../components/Footer'
 
 import '../static/style/pages/detailed.css'
 
-const Detailed = () => {
+const Detailed = (list) => {
   
 let markdown='\n# P01:课程介绍和环境搭建\n' +
 '[ **M** ] arkdown + E [ **ditor** ] = **Mditor**  \n' +
@@ -95,7 +96,7 @@ let markdown='\n# P01:课程介绍和环境搭建\n' +
                 <Breadcrumb>
                   <Breadcrumb.Item><a href='/'>首页</a></Breadcrumb.Item>
                   <Breadcrumb.Item><a href='/list'>技术</a></Breadcrumb.Item>
-                  <Breadcrumb.Item>xxxxxxxxxx</Breadcrumb.Item>
+                  <Breadcrumb.Item>{list.title}</Breadcrumb.Item>
                 </Breadcrumb>
               </div>
               
@@ -144,5 +145,19 @@ let markdown='\n# P01:课程介绍和环境搭建\n' +
     </>
   )
 }
+
+Detailed.getInitialProps = (context) => {
+  console.log(context.query.id) // 查询上下文 id号
+  const promise = axios('http://127.0.0.1:7001/default/getArticleById/'+context.query.id).then(
+    (res) => {
+      console.log(res.data)
+      // 返回一个数组 便于接收
+      return res.data.data[0]
+    }
+  )
+
+  return promise
+}
+
 
 export default Detailed
