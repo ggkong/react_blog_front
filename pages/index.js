@@ -8,6 +8,7 @@ import Author from '../components/Author'
 import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 import '../static/style/pages/index.css'
+import servicePath from '../config/apiUrl'
 
 
 const Home = (ace) => {
@@ -40,7 +41,7 @@ const Home = (ace) => {
                 <div className="list-icon">
                     <span><Icon type="calendar" /> {item.addTime}</span>
                     <span><Icon type="folder" /> {item.typeName}</span>
-                    <span><Icon type="fire" /> {item.view_count}</span>
+                    <span><Icon type="fire" /> {item.view_count}人</span>
                 </div>
 
                 <div className="list-context">{item.introduce}</div>  
@@ -61,7 +62,7 @@ const Home = (ace) => {
 }
 
 Home.getInitialProps = () => {
-  const promise = axios('http://localhost:7001/default/getArticleList').then(
+  const promise = axios(servicePath.getArticleList).then(
     (res) => {
       console.log(res.data.data)
       return res.data

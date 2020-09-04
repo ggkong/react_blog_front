@@ -3,86 +3,47 @@ import React from 'react'
 import Head from 'next/head'
 import {Row, Col, Breadcrumb,Icon,Affix} from 'antd'
 import axios from 'axios'
-import ReactMarkdown from 'react-markdown'
-import MarkNav from 'markdown-navbar';
 import 'markdown-navbar/dist/navbar.css';
+import marked from 'marked';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/monokai-sublime.css'
 
+import Tocify from '../components/tocify.tsx'
 import Header from '../components/Header'
 import Author from '../components/Author'
 import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 
+import servicePath from '../config/apiUrl'
+
 import '../static/style/pages/detailed.css'
 
 const Detailed = (list) => {
-  
-let markdown='\n# P01:课程介绍和环境搭建\n' +
-'[ **M** ] arkdown + E [ **ditor** ] = **Mditor**  \n' +
-'> Mditor 是一个简洁、易于集成、方便扩展、期望舒服的编写 markdown 的编辑器，仅此而已... \n\n' +
- '**这是加粗的文字**\n\n' +
-'*这是倾斜的文字*`\n\n' +
-'***这是斜体加粗的文字***\n\n' +
-'~~这是加删除线的文字~~ \n\n'+
-'\`console.log(111)\` \n\n'+
-'# p02:来个Hello World 初始Vue3.0\n' +
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n'+
-'***\n\n\n' +
-'# p03:Vue3.0基础知识讲解\n' +
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n\n'+
-'# p04:Vue3.0基础知识讲解\n' +
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n\n'+
-'#5 p05:Vue3.0基础知识讲解\n' +
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n\n'+
-'# p06:Vue3.0基础知识讲解\n' +
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n\n'+
-'# p07:Vue3.0基础知识讲解\n' +
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n\n'+
-'``` var a=11; ```\n\n'+
-'# p08:Vue3.0基础知识讲解\n' +
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n\n'+
-'``` var a=11; ```\n\n'+
-'# p09:Vue3.0基础知识讲解\n' +
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n\n'+
-'``` var a=11; ```\n\n'+
-'# p10:Vue3.0基础知识讲解\n' +
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n\n'+
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n\n'+
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n\n'+
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n\n'+
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n\n'+
-'``` var a=11; ```\n\n'+
-'# p11:Vue3.0基础知识讲解\n' +
-'> aaaaaaaaa\n' +
-'>> bbbbbbbbb\n' +
-'>>> cccccccccc\n\n'+
-'``` var a=11; ```'
-  
+
+  const tocify = new Tocify() 
+
+  const renderer = new marked.Renderer();
+  // create fun to 
+  renderer.heading = function(text, level, raw) {
+    const anchor = tocify.add(text, level)
+    return `<a id="${anchor}" href="#${anchor}" class="anchor-fix"><h${level}>${text}</h${level}></a>\n`;
+  };  
+
+  marked.setOptions({
+    renderer: renderer,
+    gtm:true,
+    pedantic:false,
+    sanitize:false,
+    tables: true,
+    breaks: false,
+    smartLists: true,
+    smartypants: false,
+    highlight: function (code) {
+      return hljs.highlightAuto(code).value;
+    }
+  });
+  let html = marked(list.article_content)
+
   return (
         <>
         <Head>
@@ -95,27 +56,24 @@ let markdown='\n# P01:课程介绍和环境搭建\n' +
               <div className='bread-div'>
                 <Breadcrumb>
                   <Breadcrumb.Item><a href='/'>首页</a></Breadcrumb.Item>
-                  <Breadcrumb.Item><a href='/list'>技术</a></Breadcrumb.Item>
+                  <Breadcrumb.Item><a href={'/list?type_id='+list.type_id}>{list.typeName}</a></Breadcrumb.Item>
                   <Breadcrumb.Item>{list.title}</Breadcrumb.Item>
                 </Breadcrumb>
               </div>
               
               <div>
                 <div className='detailed-title'>
-                  Vue 教程 持续更新
+                  {list.title}
                 </div>
                 
                 <div className="list-icon center">
-                  <span><Icon type="calendar" /> 2020-08-26</span>
-                  <span><Icon type="folder" /> 技术教程</span>
-                  <span><Icon type="fire" /> 9999人</span>
+                  <span><Icon type="calendar" /> {list.addTime}</span>
+                  <span><Icon type="folder" /> {list.typeName}</span>
+                  <span><Icon type="fire" /> {list.view_count}人 </span>
                 </div>
 
-                <div className='detailed-content'>
-                  <ReactMarkdown 
-                    source={markdown}
-                    escapeHtml={false}
-                  />
+                <div className='detailed-content'
+                dangerouslySetInnerHTML= {{__html:html}} >
                 </div>
                 
               </div>
@@ -130,11 +88,9 @@ let markdown='\n# P01:课程介绍和环境搭建\n' +
             <Affix offsetTop={5}>
               <div className="detailed-nav comm-box">
                 <div className="nav-title">文章目录</div>
-                <MarkNav
-                className="article-menu"
-                source={markdown}
-                ordered={false}
-              />
+                  <div className="toc-list">
+                    {tocify && tocify.render()}
+                  </div>
               </div>
             </Affix>
            
@@ -148,7 +104,7 @@ let markdown='\n# P01:课程介绍和环境搭建\n' +
 
 Detailed.getInitialProps = (context) => {
   console.log(context.query.id) // 查询上下文 id号
-  const promise = axios('http://127.0.0.1:7001/default/getArticleById/'+context.query.id).then(
+  const promise = axios(servicePath.getArticleById+context.query.id).then(
     (res) => {
       console.log(res.data)
       // 返回一个数组 便于接收
