@@ -23,6 +23,7 @@ const Home = (ace) => {
     <div>
       <Head>
         <title>首页</title>
+        <link rel="shortcut icon" href="https://s1.ax1x.com/2020/09/30/0nP73n.png" type="image/x-icon" />
       </Head>
       <Header />
       <Row className='comm-main' type = 'flex' justify='center'>
