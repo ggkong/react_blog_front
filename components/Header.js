@@ -7,6 +7,8 @@ import axios from 'axios'
 import servicePath from '../config/apiUrl'
 import Router from 'next/router'
 import { urlObjectKeys } from 'next/dist/next-server/lib/utils'
+import { Button, Tooltip } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 
 const Header = () => {
     // 使用  useState 来定义 navArray 使其成为一个数组
@@ -26,14 +28,22 @@ const Header = () => {
             Router.push('/list?type_id='+e.key)
         }
     }
+
+    const searchArticle = () => {
+        console.log("点击了搜索按钮")
+        Router.push('/search')
+    }
     
 
     return (
         <div className = "header">
             <Row type = 'flex' justify = 'center'>
-                <Col  xs={24} sm={24} md={10} lg={15} xl={12}>
+                <Col  xs={22} sm={22} md={8} lg={13} xl={10}>
                     <span className="header-logo">霜序十三</span>
                     <span className="header-txt">这是霜序十三做的第一个react的博客.</span>
+                </Col>
+                <Col xs = {2} sm = {2} md ={2} lg = {2} xl = {2}>
+                    <Button  onClick = {searchArticle} shape="circle" icon={<SearchOutlined />} />
                 </Col>
 
                 <Col className="memu-div" xs={0} sm={0} md={14} lg={8} xl={6}>
