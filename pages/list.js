@@ -1,13 +1,18 @@
 import React,{useState, useEffect} from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
-import { Row, Col, List, Icon,Breadcrumb } from 'antd'
+import { Row, Col, List,Breadcrumb } from 'antd'
 import Header from '../components/Header'
 import Author from '../components/Author'
 import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 import axios from 'axios'
 import servicePath from '../config/apiUrl'
+import {
+  FieldTimeOutlined,
+  AimOutlined,
+  HeartOutlined
+} from '@ant-design/icons';
 
 
 const MyList = (list) => {
@@ -41,9 +46,9 @@ const MyList = (list) => {
                 </div>
 
                 <div className="list-icon">
-                  <span><Icon type="calendar" /> {item.addTime}</span>
-                  <span><Icon type="folder" /> {item.typeName}</span>
-                  <span><Icon type="fire" /> { item.view_count }人</span>
+                  <span> {<FieldTimeOutlined />} {item.addTime}</span>
+                  <span> {<AimOutlined />}{item.typeName}</span>
+                  <span> {<HeartOutlined />} { item.view_count }人</span>
                 </div>
 
                 <div className="list-context">{item.introduce}</div>  

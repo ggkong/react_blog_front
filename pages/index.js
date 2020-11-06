@@ -9,6 +9,11 @@ import Advert from '../components/Advert'
 import Footer from '../components/Footer'
 import '../static/style/pages/index.css'
 import servicePath from '../config/apiUrl'
+import {
+  FieldTimeOutlined,
+  AimOutlined,
+  HeartOutlined
+} from '@ant-design/icons';
 
 
 const Home = (ace) => {
@@ -34,9 +39,9 @@ const Home = (ace) => {
                   </Link>
                 </div>
                 <div className="list-icon">
-                    <span><Icon type="calendar" /> {item.addTime}</span>
-                    <span><Icon type="folder" /> {item.typeName}</span>
-                    <span><Icon type="fire" /> {item.view_count}人</span>
+                  <span> {<FieldTimeOutlined />} {item.addTime}</span>
+                  <span> {<AimOutlined />}{item.typeName}</span>
+                  <span> {<HeartOutlined />} { item.view_count }人</span>
                 </div>
 
                 <div className="list-context">{item.introduce}</div>  

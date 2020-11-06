@@ -3,7 +3,9 @@ import { Input,List } from 'antd';
 import {Col,Row} from 'antd'
 import axios from 'axios';
 import servicePath from '../config/apiUrl'
+import Link from 'next/link';
 const {Search} = Input;
+import '../static/style/pages/search.css'
 const search = () => {
     const searchValue = useRef("");
     const [resultList, setResultList] = useState([]);
@@ -30,7 +32,7 @@ const search = () => {
             <br/>
             <Row justify="center">
             <Col xs={18} sm={18} md={15} lg={15} xl={14} >
-             <Search placeholder="input search text" onSearch={onSearch} enterButton />
+             <Search placeholder="输入你要搜索的内容" onSearch={onSearch} enterButton />
             </Col>
             </Row>
             <Row justify="center">
@@ -39,16 +41,19 @@ const search = () => {
                 dataSource = {resultList}
                 renderItem = {(item) => (
                     <List.Item>
-                        <p dangerouslySetInnerHTML={{ __html: item.highlight.introduce }}></p>
-                        {/* <p dangerouslySetInnerHTML={{ __html: item.highlight.title }}></p> */}
-                        {/* <p dangerouslySetInnerHTML={{ __html: item.highlight.article_content }}></p> */}
+                        <div className = "list-title">
+                            <Link href = {{pathname: '/detailed', query: {id: item._id}}}>
+                                <a><p dangerouslySetInnerHTML={{ __html: item.highlight.title }}></p></a>
+                            </Link>
+                        </div>
+                        <div className="list-context">
+                            {/* 应该 还有值得优化的地方 先打个 todo 标签 */}
+                            <p dangerouslySetInnerHTML={{ __html: item.highlight.introduce }}></p>
+                        </div>
                     </List.Item>
                 )}
             />
-            </Row>
-            
-            
-                
+            </Row>    
         </div>
     )
 }
